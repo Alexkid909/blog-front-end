@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link href="https://fonts.googleapis.com/css?family=Droid+Sans:700|Lato:900|Noto+Sans:100,200,300,400,500,600,700,800,900,|Montserrat:100,200,300,400,500,600,700|Open+Sans:700|Raleway:800|Roboto:900|Source+Sans+Pro:700|Ubuntu:700" rel="stylesheet">	
+	<link rel="stylesheet" type="text/css" href="css/vendor/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script type="text/javascript" src="js/vendor/angular.min.js"></script>
+	<script type="text/javascript" src="js/vendor/angular-route.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">	
+</head>
+<body ng-app="OpiaBlog">
+	<nav></nav>
+
+	<div class="header">
+		<ul class="slideShow" ng-controller="SlideShowController">
+			<slide ng-repeat="slide in slides" img-url="slide.imgUrl" title="slide.title" intro="slide.intro" slide-id="slide.id"></slide>
+		</ul>
+
+	</div>
+
+	<script type="text/javscript">
+		var slideShow = document.querySelector('.header .slideShow');
+		var slides = slideShow.querySelectorAll('.slide');
+		var currentSlide = 1;
+		var running = false;
+
+		var logSLideShowAndCLassList = function() {	
+			console.log(slideShow.classList,slideShow.attributes.class.value);
+		}
+
+		var switchToSlideNum = function(slideNum,callback) {
+			// if (running) {
+			// 	return false;
+			// }
+			// running = true;
+			console.log("switchSlideNum");
+			console.log(currentSlide);
+			logSLideShowAndCLassList();
+			var translatePercent = (slideNum - 1) / slides.length * 100;
+			slideShow.style.setProperty("--translateValue","-"+translatePercent+"%");
+			currentSlide = slideNum;
+			console.log(currentSlide);
+			setTimeout(function() {
+				if(callback) {
+					console.log("switchToSlideNum callback");
+					callback();
+				};
+			},0);
+		}
+		var slideByNumOfSlides = function(num) {
+			console.log("slideByNumOfSlides");
+			slideToSlideNum(currentSlide + num);
+		}
+
+		var removeTransitionClass = function() {
+			console.log("removing transition class");
+			slideShow.classList.remove('transition');
+			logSLideShowAndCLassList();
+		}
+		var slideToSlideNum = function(num) {
+			console.log("slideToSlideNum");
+			function addRemoveTransitionListener(callback) {
+				console.log("addRemoveTransitionListener");
+				slideShow.addEventListener('transitionend',removeTransitionClass);
+				if(callback) {
+					callback()
+				};
+			};
+			function addTransition() {
+				console.log("adding transition class");			
+				slideShow.classList.add('transition');
+			};
+			addRemoveTransitionListener()
+			if (num > slides.length  || num < 0) {
+			}
+			if (num > slides.length) {	
+				num = num - slides.length;
+				switchToSlideNum(num,function() {
+					addTransition()
+					switchToSlideNum(currentSlide+1);
+				});
+			} else if (num < 1) {
+				num = slides.length;
+				debugger;
+				switchToSlideNum(num,function() {
+					addTransition()
+					switchToSlideNum(currentSlide-1);
+				});
+			} else {
+				addTransition()
+				switchToSlideNum(num);
+			}
+		} 
+
+	// setInterval(function() {
+	// 	slideByNumOfSlides(1);
+	// },4000);
+
+	</script>
+
+	<div class="main" ng-controller="MainController">
+		<div class="container">
+			
+			<div ng-repeat="post in posts">
+				<blog-summary
+					id={{post.id}}
+					title={{post.title}}
+					author={{post.author}}
+					date-time-posted-string={{post.dateTimePosted}}
+					paragraphs="post.paragraphs"
+					img-url={{post.imgUrl}}
+				></blog-summary>
+			</div>
+			<a class="more-posts" href="">
+				<div>			
+					<span>{{"+ More Posts" | uppercase}}</span>
+				</div>
+			</a>
+		</div>
+	</div>
+
+	<div class="footer footer-1">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-4 recent-posts">
+					<h4>{{"Recent Posts" | uppercase}}</h4>
+					<ul>
+						<li>The Life of a Blog Title</li>
+						<li>Just Another Title</li>
+						<li>Threesy Does It</li>
+						<li>One Final Heading?</li>
+					</ul>
+				</div>
+				<div  class="col-md-4 social">
+					<h4>{{"Social" | uppercase}}</h4>
+					<ul>
+						<li><span>f</span></li>
+						<li><span>t</span></li>
+						<li><span>in</span></li>
+						<li><span>li</span></li>						
+					</ul>
+				</div>
+				<div class="col-md-4 about">
+					<h4>{{"About" | uppercase}}</h4>
+					<p>Porttitor justo urna tempus voluptatem tincidunt amet sed eum convallis praesentium sed quam ut suscipit in consectetuer <span>aliquet morbi</span> sed amet bibendum ante at etiam turpis accumsan ac etiam <span>turpis</span> nisl sem mauris ut nullam ac posuere commodo</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="footer footer-2">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 copyright">
+					<div>&copy; 2015 Blog Template All Rights Reserved.</div>
+				</div>
+				<div class="col-md-4 terms-and-privacy">
+					<div class="row">
+						<div class="col-md-4 col-md-offset-4 terms-of-use"><div>{{"Terms of Use" | uppercase}}</div>
+						</div>
+						<div class="col-md-4 privacy-policy"><div>{{"Privacy policy" | uppercase}}</div>
+						</div>
+					</div>								
+			</div>
+		</div>
+	</div>
+
+	<!-- Modules -->
+	<script type="text/javascript" src="js/app.js"></script>
+
+	<!-- Controllers -->
+
+	<script type="text/javascript" src="js/controllers/MainController.js"></script>
+	<script type="text/javascript" src="js/controllers/SlideShowController.js"></script>
+
+	<!-- Directives -->
+
+	<script type="text/javascript" src="js/directives/blog-summary.js"></script>
+	<script type="text/javascript" src="js/directives/slide.js"></script>
+	<script type="text/javascript" src="js/directives/nav.js"></script>
+
+	<!-- Services -->
+
+	<script type="text/javascript" src="js/services/blogPosts.js"></script>
+	<script type="text/javascript" src="js/services/slideShowSlides.js"></script>
+
+
+
+</body>
+</html>

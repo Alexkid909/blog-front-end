@@ -1,0 +1,30 @@
+<div class="post-summary-wrapper">
+	<div class="row">
+		<div class="col-md-4 post-img-wrapper">
+			<div class="post-img-container">				
+				<div class="post-img-overlay">
+					<img class="doc-icon" src="images/doc-icon.png">				
+				</div>	
+				<img class="post-img" ng-src="{{imgUrl}}">
+			</div>
+		</div>
+		<div class="col-md-8 post-content-container">
+			<div class="post-header-wrapper">
+				<h5>				
+					<span class="posted-by">POSTED BY:</span>
+					<span class="author">{{author | uppercase}}</span>
+					<span class="date-time-posted">{{dateTimePosted | date: "'/' HH:mm '/' dd MMM yyyy" | uppercase}}</span>
+				</h5>
+			</div>
+			<div class="post-title-wrapper">
+				<h3>{{title | uppercase}}</h3>
+			</div>
+			<div class="post-body-wrapper">
+				<p>
+					{{paragraphs[0]}}
+				</p>
+			</div>
+			<a class="read-more-link" href="">Read more...</a>
+		</div>
+	</div>
+</div>
